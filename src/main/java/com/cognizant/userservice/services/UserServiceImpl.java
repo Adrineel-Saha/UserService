@@ -2,14 +2,16 @@ package com.cognizant.userservice.services;
 
 import com.cognizant.userservice.dtos.UserDTO;
 import com.cognizant.userservice.entities.User;
+import com.cognizant.userservice.exceptions.EmailAlreadyExistsException;
 import com.cognizant.userservice.exceptions.ResourceNotFoundException;
 import com.cognizant.userservice.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+@Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
@@ -18,6 +20,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO createUser(UserDTO userDTO) {
+        if(userRepository.findByEmail(userDTO.getEmail()).isPresent()){
+            throw new EmailAlreadyExistsException("User Already Exists with Email Id: " + userDTO.getEmail());
+        }
+
         User user=modelMapper.map(userDTO,User.class);
         User savedUser=userRepository.save(user);
         UserDTO savedUserDTO = modelMapper.map(savedUser,UserDTO.class);
@@ -31,7 +37,7 @@ public class UserServiceImpl implements UserService {
                 .map(user->modelMapper.map(user,UserDTO.class)).toList();
 
         if(userDTOList.isEmpty()){
-            throw new RuntimeException("List is Empty");
+            throw new RuntimeException("User List is Empty");
         }
 
         return userDTOList;
@@ -63,14 +69,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(Long id) {
+    public String deleteUser(Long id) {
         User user=userRepository.findById(id).orElseThrow(
                 ()->new ResourceNotFoundException("User not found with id: " + id)
         );
 
-        if(user!=null){
-            userRepository.deleteById(id);
-            System.out.println("User deleted with id: " + id);
-        }
+        userRepository.delete(user);
+        return "User deleted with id: " + id;
     }
 }
