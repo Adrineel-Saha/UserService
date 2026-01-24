@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = EmailAlreadyExistsException.class)
     public ResponseEntity<String> handleResourceNotFoundException(EmailAlreadyExistsException ex){
-        ResponseEntity<String> errorResponse = new ResponseEntity<String>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        ResponseEntity<String> errorResponse = new ResponseEntity<String>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         return errorResponse;
     }
 

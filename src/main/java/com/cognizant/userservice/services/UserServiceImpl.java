@@ -6,6 +6,8 @@ import com.cognizant.userservice.exceptions.EmailAlreadyExistsException;
 import com.cognizant.userservice.exceptions.ResourceNotFoundException;
 import com.cognizant.userservice.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,8 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Autowired
     private ModelMapper modelMapper;
+
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     @Override
     public UserDTO createUser(UserDTO userDTO) {
@@ -59,6 +63,10 @@ public class UserServiceImpl implements UserService {
                 ()->new ResourceNotFoundException("User not found with id: " + id)
         );
 
+        if(userRepository.findByEmail(userDTO.getEmail()).isPresent()){
+            throw new EmailAlreadyExistsException("User Already Exists with Email Id: " + userDTO.getEmail());
+        }
+
         user.setUserName(userDTO.getUserName());
         user.setEmail(userDTO.getEmail());
 
@@ -73,6 +81,8 @@ public class UserServiceImpl implements UserService {
         User user=userRepository.findById(id).orElseThrow(
                 ()->new ResourceNotFoundException("User not found with id: " + id)
         );
+
+        log.info("Deleted User: " + user);
 
         userRepository.delete(user);
         return "User deleted with id: " + id;

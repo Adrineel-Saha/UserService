@@ -5,9 +5,13 @@ spring:
   application:
     name: UserService
   datasource:
-    url: jdbc:h2:mem:UserServiceDatabase
-    username: sa
+    url: jdbc:mysql://localhost:3306/UserServiceDatabase
+    username: root
+    password: root
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
+  sql:
+    init:
+      mode: always
