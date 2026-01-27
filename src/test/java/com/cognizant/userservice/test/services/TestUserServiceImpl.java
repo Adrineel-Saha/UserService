@@ -12,7 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.List;
 import java.util.Optional;
@@ -134,6 +133,36 @@ public class TestUserServiceImpl {
     public void testCreateUserNegativeWhenUserNameIsBlank(){
         UserDTO userDTO=new UserDTO();
         userDTO.setUserName("");
+        userDTO.setEmail("yash@example.com");
+
+        try{
+            userServiceImpl.createUser(userDTO);
+        } catch(Exception ex){
+            assertThat(ex)
+                    .isInstanceOf(ConstraintViolationException.class)
+                    .hasMessageContaining("User Name Cannot be blank");
+        }
+    }
+
+    @Test
+    public void testCreateUserNegativeWhenUserNameLengthIsLess(){
+        UserDTO userDTO=new UserDTO();
+        userDTO.setUserName("ya");
+        userDTO.setEmail("yash@example.com");
+
+        try{
+            userServiceImpl.createUser(userDTO);
+        } catch(Exception ex){
+            assertThat(ex)
+                    .isInstanceOf(ConstraintViolationException.class)
+                    .hasMessageContaining("User Name Cannot be blank");
+        }
+    }
+
+    @Test
+    public void testCreateUserNegativeWhenUserNameLengthIsMore(){
+        UserDTO userDTO=new UserDTO();
+        userDTO.setUserName("yashbiswarkarmaarunabhkalitaadrineelsahasurajsharmaakashpatil");
         userDTO.setEmail("yash@example.com");
 
         try{
