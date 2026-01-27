@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getUser(Long id) {
         User user=userRepository.findById(id).orElseThrow(
-                ()->new ResourceNotFoundException("User not found with id: "+ id)
+                ()->new ResourceNotFoundException("User not found with Id: "+ id)
         );
 
         UserDTO userDTO=modelMapper.map(user,UserDTO.class);
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO updateUser(Long id, UserDTO userDTO) {
         User user=userRepository.findById(id).orElseThrow(
-                ()->new ResourceNotFoundException("User not found with id: " + id)
+                ()->new ResourceNotFoundException("User not found with Id: " + id)
         );
 
         if(userRepository.findByEmail(userDTO.getEmail()).isPresent()){
@@ -79,12 +79,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public String deleteUser(Long id) {
         User user=userRepository.findById(id).orElseThrow(
-                ()->new ResourceNotFoundException("User not found with id: " + id)
+                ()->new ResourceNotFoundException("User not found with Id: " + id)
         );
 
         log.info("Deleted User: " + user);
 
         userRepository.delete(user);
-        return "User deleted with id: " + id;
+        return "User deleted with Id: " + id;
     }
 }

@@ -3,6 +3,7 @@ package com.cognizant.userservice.test.services;
 import com.cognizant.userservice.dtos.UserDTO;
 import com.cognizant.userservice.entities.User;
 import com.cognizant.userservice.exceptions.EmailAlreadyExistsException;
+import com.cognizant.userservice.exceptions.ResourceNotFoundException;
 import com.cognizant.userservice.repositories.UserRepository;
 import com.cognizant.userservice.services.UserServiceImpl;
 import jakarta.validation.ConstraintViolation;
@@ -23,8 +24,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.any;
@@ -91,7 +91,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testGetAllUsersException(){
+    public void testGetAllUsersNegativeWhenListIsEmpty(){
         try{
             when(userRepository.findAll()).thenReturn(List.of());
 
@@ -112,14 +112,17 @@ public class TestUserServiceImpl {
             userDTO.setEmail("akash@example.com");
 
             User user=new User();
+            user.setId(1L);
             user.setUserName("Akash");
             user.setEmail("akash@example.com");
 
             User savedUser=new User();
+            savedUser.setId(1L);
             savedUser.setUserName("Akash");
             savedUser.setEmail("akash@example.com");
 
             UserDTO saveduserDTO=new UserDTO();
+            saveduserDTO.setId(1L);
             saveduserDTO.setUserName("Akash");
             saveduserDTO.setEmail("akash@example.com");
 
@@ -204,16 +207,17 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testCreateUserException(){
-        UserDTO userDTO=new UserDTO();
-        userDTO.setUserName("Suraj");
-        userDTO.setEmail("suraj@example.com");
-
-        User user=new User();
-        user.setUserName("Suraj");
-        user.setEmail("suraj@example.com");
-
+    public void testCreateUserNegativeWhenEmailAlreadyExists(){
         try{
+            UserDTO userDTO=new UserDTO();
+            userDTO.setUserName("Suraj");
+            userDTO.setEmail("suraj@example.com");
+
+            User user=new User();
+            user.setId(1L);
+            user.setUserName("Suraj");
+            user.setEmail("suraj@example.com");
+
             when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
             UserDTO actualUserDTO=userServiceImpl.createUser(userDTO);
@@ -245,6 +249,186 @@ public class TestUserServiceImpl {
         } catch(Exception ex){
             assertTrue(false);
         }
+    }
 
+    @Test
+    public void testGetUserNegativeWhenUserNotFound(){
+        try{
+            when(userRepository.findById(any())).thenReturn(Optional.empty());
+            UserDTO actualUserDTO=userServiceImpl.getUser(1L);
+        } catch(Exception ex){
+            assertThat(ex)
+                    .isInstanceOf(ResourceNotFoundException.class)
+                    .hasMessageContaining("User not found with Id: 1");
+        }
+    }
+
+    @Test
+    public void testDeleteUserPositive(){
+        try{
+            User user=new User();
+            user.setId(1L);
+            user.setUserName("Aman");
+            user.setEmail("Aman@example.com");
+
+            when(userRepository.findById(any())).thenReturn(Optional.of(user));
+
+            String result=userServiceImpl.deleteUser(1L);
+            assertEquals("User deleted with Id: 1",result);
+        } catch(Exception ex){
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testDeleteUserNegativeWhenUserNotFound(){
+        try{
+            when(userRepository.findById(any())).thenReturn(Optional.empty());
+            String result=userServiceImpl.deleteUser(1L);
+        } catch(Exception ex){
+            assertThat(ex)
+                    .isInstanceOf(ResourceNotFoundException.class)
+                    .hasMessageContaining("User not found with Id: 1");
+        }
+    }
+
+    @Test
+    public void testUpdateUserPositive(){
+        try{
+            UserDTO userDTO=new UserDTO();
+            userDTO.setUserName("Akash");
+            userDTO.setEmail("akash@example.com");
+
+            User user=new User();
+            user.setId(1L);
+            user.setUserName("Akash");
+            user.setEmail("akash@example.com");
+
+            User savedUser=new User();
+            savedUser.setId(1L);
+            savedUser.setUserName("Aman");
+            savedUser.setEmail("aman@example.com");
+
+            UserDTO saveduserDTO=new UserDTO();
+            saveduserDTO.setId(1L);
+            saveduserDTO.setUserName("Aman");
+            saveduserDTO.setEmail("aman@example.com");
+
+            when(userRepository.findById(any())).thenReturn(Optional.of(user));
+            when(userRepository.findByEmail(userDTO.getEmail())).thenReturn(Optional.empty());
+            when(userRepository.save(any(User.class))).thenReturn(savedUser);
+            when(modelMapper.map(any(User.class),eq(UserDTO.class))).thenReturn(saveduserDTO);
+
+            UserDTO actualUserDTO=userServiceImpl.updateUser(1L,userDTO);
+            assertNotNull(actualUserDTO);
+        } catch(Exception ex){
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testUpdateUserNegativeWhenUserNameIsBlank(){
+        UserDTO userDTO=new UserDTO();
+        userDTO.setUserName("");
+        userDTO.setEmail("aman@example.com");
+
+        Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
+
+        assertThat(violations)
+                .extracting(v -> v.getMessage())
+                .anyMatch(msg -> msg.contains("User Name cannot be blank"));
+
+    }
+
+    @Test
+    public void testUpdateUserNegativeWhenUserNameLengthIsLess(){
+        UserDTO userDTO=new UserDTO();
+        userDTO.setUserName("am");
+        userDTO.setEmail("aman@example.com");
+
+        Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
+
+        assertThat(violations)
+                .extracting(v -> v.getMessage())
+                .anyMatch(msg -> msg.contains("User Name must be between 3 to 50 characters"));
+    }
+
+    @Test
+    public void testUpdateUserNegativeWhenUserNameLengthIsMore(){
+        UserDTO userDTO=new UserDTO();
+        userDTO.setUserName("amanrajarunabhkalitaadrineelsahasurajsharmaakashpatil");
+        userDTO.setEmail("aman@example.com");
+
+        Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
+
+        assertThat(violations)
+                .extracting(v -> v.getMessage())
+                .anyMatch(msg -> msg.contains("User Name must be between 3 to 50 characters"));
+    }
+
+    @Test
+    public void testUpdateUserNegativeWhenEmailIsBlank(){
+        UserDTO userDTO=new UserDTO();
+        userDTO.setUserName("Aman");
+        userDTO.setEmail("");
+
+        Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
+
+        assertThat(violations)
+                .extracting(v -> v.getMessage())
+                .anyMatch(msg -> msg.contains("Email cannot be blank"));
+
+    }
+
+    @Test
+    public void testUpdateUserNegativeWhenEmailIsInValid(){
+        UserDTO userDTO=new UserDTO();
+        userDTO.setUserName("Aman");
+        userDTO.setEmail("amanexamplecom");
+
+        Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
+
+        assertThat(violations)
+                .extracting(v -> v.getMessage())
+                .anyMatch(msg -> msg.contains("Please enter a valid email"));
+    }
+
+    @Test
+    public void testUpdateUserNegativeWhenUserNotFound(){
+        try{
+            UserDTO userDTO=new UserDTO();
+            userDTO.setUserName("Aman");
+            userDTO.setEmail("aman@example.com");
+
+            when(userRepository.findById(any())).thenReturn(Optional.empty());
+            UserDTO actualUserDTO=userServiceImpl.updateUser(1L, userDTO);
+        } catch(Exception ex){
+            assertThat(ex)
+                    .isInstanceOf(ResourceNotFoundException.class)
+                    .hasMessageContaining("User not found with Id: 1");
+        }
+    }
+
+    @Test
+    public void testUpdateUserNegativeWhenEmailAlreadyExists(){
+        try{
+            UserDTO userDTO=new UserDTO();
+            userDTO.setUserName("Aman");
+            userDTO.setEmail("aman@example.com");
+
+            User user=new User();
+            user.setId(1L);
+            user.setUserName("Akash");
+            user.setEmail("aman@example.com");
+
+            when(userRepository.findById(any())).thenReturn(Optional.of(user));
+            when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+
+            UserDTO actualUserDTO=userServiceImpl.updateUser(1L,userDTO);
+        } catch(Exception ex){
+            assertThat(ex)
+                    .isInstanceOf(EmailAlreadyExistsException.class)
+                    .hasMessageContaining("User Already Exists with Email Id: aman@example.com");
+        }
     }
 }
