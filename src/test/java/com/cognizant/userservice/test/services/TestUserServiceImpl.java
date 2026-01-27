@@ -2,9 +2,12 @@ package com.cognizant.userservice.test.services;
 
 import com.cognizant.userservice.dtos.UserDTO;
 import com.cognizant.userservice.entities.User;
+import com.cognizant.userservice.exceptions.EmailAlreadyExistsException;
 import com.cognizant.userservice.repositories.UserRepository;
 import com.cognizant.userservice.services.UserServiceImpl;
-import org.hibernate.exception.ConstraintViolationException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,10 +18,11 @@ import org.modelmapper.ModelMapper;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -34,14 +38,16 @@ public class TestUserServiceImpl {
     @InjectMocks
     private UserServiceImpl userServiceImpl;
 
+    private Validator validator;
+
     @BeforeEach
     void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+        validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
 
     @AfterEach
     void tearDown() throws Exception {
-
     }
 
     @Test
@@ -135,13 +141,12 @@ public class TestUserServiceImpl {
         userDTO.setUserName("");
         userDTO.setEmail("yash@example.com");
 
-        try{
-            userServiceImpl.createUser(userDTO);
-        } catch(Exception ex){
-            assertThat(ex)
-                    .isInstanceOf(ConstraintViolationException.class)
-                    .hasMessageContaining("User Name Cannot be blank");
-        }
+        Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
+
+        assertThat(violations)
+                .extracting(v -> v.getMessage())
+                .anyMatch(msg -> msg.contains("User Name cannot be blank"));
+
     }
 
     @Test
@@ -150,13 +155,11 @@ public class TestUserServiceImpl {
         userDTO.setUserName("ya");
         userDTO.setEmail("yash@example.com");
 
-        try{
-            userServiceImpl.createUser(userDTO);
-        } catch(Exception ex){
-            assertThat(ex)
-                    .isInstanceOf(ConstraintViolationException.class)
-                    .hasMessageContaining("User Name Cannot be blank");
-        }
+        Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
+
+        assertThat(violations)
+                .extracting(v -> v.getMessage())
+                .anyMatch(msg -> msg.contains("User Name must be between 3 to 50 characters"));
     }
 
     @Test
@@ -165,13 +168,83 @@ public class TestUserServiceImpl {
         userDTO.setUserName("yashbiswarkarmaarunabhkalitaadrineelsahasurajsharmaakashpatil");
         userDTO.setEmail("yash@example.com");
 
+        Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
+
+        assertThat(violations)
+                .extracting(v -> v.getMessage())
+                .anyMatch(msg -> msg.contains("User Name must be between 3 to 50 characters"));
+    }
+
+    @Test
+    public void testCreateUserNegativeWhenEmailIsBlank(){
+        UserDTO userDTO=new UserDTO();
+        userDTO.setUserName("Yash");
+        userDTO.setEmail("");
+
+        Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
+
+        assertThat(violations)
+                .extracting(v -> v.getMessage())
+                .anyMatch(msg -> msg.contains("Email cannot be blank"));
+
+    }
+
+    @Test
+    public void testCreateUserNegativeWhenEmailIsInValid(){
+        UserDTO userDTO=new UserDTO();
+        userDTO.setUserName("Yash");
+        userDTO.setEmail("yashexamplecom");
+
+        Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
+
+        assertThat(violations)
+                .extracting(v -> v.getMessage())
+                .anyMatch(msg -> msg.contains("Please enter a valid email"));
+
+    }
+
+    @Test
+    public void testCreateUserException(){
+        UserDTO userDTO=new UserDTO();
+        userDTO.setUserName("Suraj");
+        userDTO.setEmail("suraj@example.com");
+
+        User user=new User();
+        user.setUserName("Suraj");
+        user.setEmail("suraj@example.com");
+
         try{
-            userServiceImpl.createUser(userDTO);
+            when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+
+            UserDTO actualUserDTO=userServiceImpl.createUser(userDTO);
         } catch(Exception ex){
             assertThat(ex)
-                    .isInstanceOf(ConstraintViolationException.class)
-                    .hasMessageContaining("User Name Cannot be blank");
+                    .isInstanceOf(EmailAlreadyExistsException.class)
+                    .hasMessageContaining("User Already Exists with Email Id: suraj@example.com");
         }
     }
 
+    @Test
+    public void testGetUserPositive(){
+        try{
+            User user=new User();
+            user.setId(1L);
+            user.setUserName("Aman");
+            user.setEmail("Aman@example.com");
+
+            UserDTO userDTO=new UserDTO();
+            userDTO.setId(1L);
+            userDTO.setUserName("Aman");
+            userDTO.setEmail("Aman@example.com");
+
+            when(userRepository.findById(any())).thenReturn(Optional.of(user));
+            when(modelMapper.map(any(User.class),eq(UserDTO.class))).thenReturn(userDTO);
+
+            UserDTO actualUserDTO=userServiceImpl.getUser(1L);
+            assertNotNull(actualUserDTO);
+        } catch(Exception ex){
+            assertTrue(false);
+        }
+
+    }
 }

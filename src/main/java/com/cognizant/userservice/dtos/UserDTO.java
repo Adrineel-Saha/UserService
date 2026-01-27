@@ -14,7 +14,7 @@ public class UserDTO {
     )
     private Long id;
 
-    @NotBlank(message="User Name Cannot be blank")
+    @NotBlank(message="User Name cannot be blank")
     @Size(min = 3, max = 50, message = "User Name must be between 3 to 50 characters")
     @Schema(
             description = "User Name"
