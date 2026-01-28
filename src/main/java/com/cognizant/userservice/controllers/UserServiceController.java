@@ -70,7 +70,12 @@ public class UserServiceController {
         log.info("Getting All Users");
         List<UserDTO> responseUserDTOList =userService.getAllUsers();
         log.info("Users list: " + responseUserDTOList);
-        return new ResponseEntity<>(responseUserDTOList, HttpStatus.OK);
+        if(responseUserDTOList!=null && !responseUserDTOList.isEmpty()){
+            return new ResponseEntity<>(responseUserDTOList, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("{id}")
@@ -92,7 +97,12 @@ public class UserServiceController {
         log.info("Getting User with Id: " + id);
         UserDTO responseUserDTO =userService.getUser(id);
         log.info("Found User: " + responseUserDTO);
-        return new ResponseEntity<>(responseUserDTO, HttpStatus.OK);
+        if (responseUserDTO != null) {
+            return new ResponseEntity<>(responseUserDTO, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("{id}")
@@ -139,6 +149,11 @@ public class UserServiceController {
     public ResponseEntity<String>  deleteUser(@PathVariable("id") Long id){
         log.info("Deleting User with Id: " + id);
         String result=userService.deleteUser(id);
-        return new ResponseEntity<>(result,HttpStatus.OK);
+        if (result != null) {
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }
