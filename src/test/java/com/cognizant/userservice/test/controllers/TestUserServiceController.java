@@ -10,8 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,9 @@ public class TestUserServiceController {
     private UserService userService;
     @InjectMocks
     private UserServiceController userServiceController;
+
+    @Autowired
+    private LocalValidatorFactoryBean validator;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -215,4 +220,165 @@ public class TestUserServiceController {
             assertTrue(false);
         }
     }
+
+    @Test
+    public void testAddUserWhenUserIsValid() {
+        UserDTO userDTO=new UserDTO();
+        userDTO.setId(1L);
+        userDTO.setUserName("Suraj");
+        userDTO.setEmail("suraj@example.com");
+
+        validator.validate(userDTO).stream().forEach((constraintViolation)->assertNull(constraintViolation));
+    }
+
+    @Test
+    public void testAddUserPositiveAssertReturnValue() {
+        UserDTO userDTO=new UserDTO();
+        userDTO.setId(1L);
+        userDTO.setUserName("Suraj");
+        userDTO.setEmail("suraj@example.com");
+
+        try {
+            when(userService.createUser(any(UserDTO.class))).thenReturn(userDTO);
+            ResponseEntity<UserDTO> responseEntity=userServiceController.createUser(userDTO);
+            UserDTO actualUserDTO=responseEntity.getBody();
+            assertNotNull(actualUserDTO);
+        }catch(Exception e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testAddUserPositiveAssertStatusCode() {
+        UserDTO userDTO=new UserDTO();
+        userDTO.setId(1L);
+        userDTO.setUserName("Suraj");
+        userDTO.setEmail("suraj@example.com");
+
+        try {
+            when(userService.createUser(any(UserDTO.class))).thenReturn(userDTO);
+            ResponseEntity<UserDTO> responseEntity=userServiceController.createUser(userDTO);
+            assertEquals(201,responseEntity.getStatusCode().value());
+        }catch(Exception e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testAddUserWhenUserIsNotValid() {
+        UserDTO userDTO=new UserDTO();
+        userDTO.setId(1L);
+        userDTO.setUserName("S");
+        userDTO.setEmail("surajexamplecom");
+
+        validator.validate(userDTO).stream().forEach((constraintViolation)->assertNotNull(constraintViolation));
+    }
+
+    @Test
+    public void testAddUserNegativeAssertReturnValue() {
+        UserDTO userDTO=null;
+
+        try {
+            when(userService.createUser(any(UserDTO.class))).thenReturn(userDTO);
+            ResponseEntity<UserDTO> responseEntity=userServiceController.createUser(userDTO);
+            UserDTO actualUserDTO=responseEntity.getBody();
+            assertNull(actualUserDTO);
+        }catch(Exception e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testAddUserNegativeAssertStatusCode() {
+        UserDTO userDTO=null;
+
+        try {
+            when(userService.createUser(any(UserDTO.class))).thenReturn(userDTO);
+            ResponseEntity<UserDTO> responseEntity=userServiceController.createUser(userDTO);
+            assertEquals(400,responseEntity.getStatusCode().value());
+        }catch(Exception e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testUpdateUserWhenUserIsValid() {
+        UserDTO userDTO=new UserDTO();
+        userDTO.setId(1L);
+        userDTO.setUserName("Yash");
+        userDTO.setEmail("yash@example.com");
+
+        validator.validate(userDTO).stream().forEach((constraintViolation)->assertNull(constraintViolation));
+    }
+
+    @Test
+    public void testUpdateUserPositiveAssertReturnValue() {
+        UserDTO userDTO=new UserDTO();
+        userDTO.setId(1L);
+        userDTO.setUserName("Yash");
+        userDTO.setEmail("yash@example.com");
+
+        try {
+            when(userService.updateUser(any(),any(UserDTO.class))).thenReturn(userDTO);
+            ResponseEntity<UserDTO> responseEntity=userServiceController.updateUser(1L,userDTO);
+            UserDTO actualUserDTO=responseEntity.getBody();
+            assertNotNull(actualUserDTO);
+        }catch(Exception e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testUpdateUserPositiveAssertStatusCode() {
+        UserDTO userDTO=new UserDTO();
+        userDTO.setId(1L);
+        userDTO.setUserName("Yash");
+        userDTO.setEmail("yash@example.com");
+
+        try {
+            when(userService.updateUser(any(),any(UserDTO.class))).thenReturn(userDTO);
+            ResponseEntity<UserDTO> responseEntity=userServiceController.updateUser(1L,userDTO);
+            assertEquals(202,responseEntity.getStatusCode().value());
+        }catch(Exception e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testUpdateUserWhenUserIsNotValid() {
+        UserDTO userDTO=new UserDTO();
+        userDTO.setId(1L);
+        userDTO.setUserName("Y");
+        userDTO.setEmail("yashexamplecom");
+
+        validator.validate(userDTO).stream().forEach((constraintViolation)->assertNotNull(constraintViolation));
+    }
+
+    @Test
+    public void testUpdateUserNegativeAssertReturnValue() {
+        UserDTO userDTO=null;
+
+        try {
+            when(userService.updateUser(any(),any(UserDTO.class))).thenReturn(userDTO);
+            ResponseEntity<UserDTO> responseEntity=userServiceController.updateUser(1L,userDTO);
+            UserDTO actualUserDTO=responseEntity.getBody();
+            assertNull(actualUserDTO);
+        }catch(Exception e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testUpdateUserNegativeAssertStatusCode() {
+        UserDTO userDTO=null;
+
+        try {
+            when(userService.updateUser(any(),any(UserDTO.class))).thenReturn(userDTO);
+            ResponseEntity<UserDTO> responseEntity=userServiceController.updateUser(1L,userDTO);
+            assertEquals(400,responseEntity.getStatusCode().value());
+        }catch(Exception e) {
+            assertTrue(false);
+        }
+    }
+
 }

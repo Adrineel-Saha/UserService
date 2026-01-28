@@ -48,7 +48,13 @@ public class UserServiceController {
         log.info("Adding new User: " + userDTO);
         UserDTO responseUserDTO =userService.createUser(userDTO);
         log.info("Created User: " + responseUserDTO);
-        return new ResponseEntity<>(responseUserDTO, HttpStatus.CREATED);
+
+        if(responseUserDTO!=null){
+            return new ResponseEntity<>(responseUserDTO, HttpStatus.CREATED);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping
@@ -128,7 +134,13 @@ public class UserServiceController {
         log.info("Updating User with Id: " + id + " and details: " + userDTO);
         UserDTO responseUserDTO =userService.updateUser(id,userDTO);
         log.info("Updated User: " + responseUserDTO);
-        return new ResponseEntity<>(responseUserDTO, HttpStatus.ACCEPTED);
+        if(responseUserDTO != null){
+            return new ResponseEntity<>(responseUserDTO, HttpStatus.ACCEPTED);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @DeleteMapping("{id}")
