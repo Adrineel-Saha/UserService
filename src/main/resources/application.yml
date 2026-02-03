@@ -1,22 +1,5 @@
-server:
-  port: 8080
-
 spring:
   application:
     name: UserService
-  datasource:
-    url: jdbc:mysql://localhost:3306/UserServiceDatabase
-    username: root
-    password: root
-  jpa:
-    database-platform: org.hibernate.dialect.MySQLDialect
-    hibernate:
-      ddl-auto: update
-  sql:
-    init:
-      mode: always
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+  config:
+    import: optional:configserver:http://localhost:8888
