@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 @ContextConfiguration(classes = UserServiceApplication.class)
-@ActiveProfiles("test")
 public class TestUserRepository {
     @Autowired
     private UserRepository userRepository;
