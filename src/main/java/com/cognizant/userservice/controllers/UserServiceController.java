@@ -22,7 +22,7 @@ import java.util.List;
         name="CRUD REST APIs for User Service",
         description="CRUD REST APIs - Create User, Get User, Update User, Delete User"
 )
-
+@CrossOrigin(originPatterns = { "http://*:9191", "https://*:9191" })
 public class UserServiceController {
     @Autowired
     private UserService userService;
