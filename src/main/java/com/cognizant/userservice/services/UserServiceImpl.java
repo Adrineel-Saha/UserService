@@ -5,6 +5,7 @@ import com.cognizant.userservice.entities.User;
 import com.cognizant.userservice.exceptions.EmailAlreadyExistsException;
 import com.cognizant.userservice.exceptions.ResourceNotFoundException;
 import com.cognizant.userservice.repositories.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,13 +15,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private ModelMapper modelMapper;
 
-    private static final Logger log = LoggerFactory.getLogger(UserService.class);
+//    private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     @Override
     public UserDTO createUser(UserDTO userDTO) {
