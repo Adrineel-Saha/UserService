@@ -1,4 +1,4 @@
-﻿package com.cognizant.userservice.test.repositories;
+package com.cognizant.userservice.test.repositories;
 
 import com.cognizant.userservice.entities.User;
 import com.cognizant.userservice.main.UserServiceApplication;
