@@ -383,4 +383,105 @@ public class TestUserServiceController {
         }
     }
 
+    @Test
+    public void testGetAllUsersPositiveAssertListSize() {
+        List<UserDTO> userDTOList=new ArrayList<>();
+
+        UserDTO userDTO1=new UserDTO();
+        userDTO1.setId(1L);
+        userDTO1.setUserName("Akash");
+        userDTO1.setEmail("akash@example.com");
+
+        UserDTO userDTO2=new UserDTO();
+        userDTO2.setId(2L);
+        userDTO2.setUserName("Suraj");
+        userDTO2.setEmail("suraj@example.com");
+
+        userDTOList.add(userDTO1);
+        userDTOList.add(userDTO2);
+
+        try {
+            when(userService.getAllUsers()).thenReturn(userDTOList);
+            ResponseEntity<List<UserDTO>> responseEntity=userServiceController.getAllUsers();
+            assertEquals(2,responseEntity.getBody().size());
+        }catch(Exception e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testGetUserPositiveAssertUserName() {
+        UserDTO userDTO=new UserDTO();
+        userDTO.setId(1L);
+        userDTO.setUserName("Suraj");
+        userDTO.setEmail("suraj@example.com");
+
+        try {
+            when(userService.getUser(any())).thenReturn(userDTO);
+            ResponseEntity<UserDTO> responseEntity=userServiceController.getUser(1L);
+            assertEquals("Suraj",responseEntity.getBody().getUserName());
+        }catch(Exception e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testGetUserPositiveAssertEmail() {
+        UserDTO userDTO=new UserDTO();
+        userDTO.setId(1L);
+        userDTO.setUserName("Suraj");
+        userDTO.setEmail("suraj@example.com");
+
+        try {
+            when(userService.getUser(any())).thenReturn(userDTO);
+            ResponseEntity<UserDTO> responseEntity=userServiceController.getUser(1L);
+            assertEquals("suraj@example.com",responseEntity.getBody().getEmail());
+        }catch(Exception e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testDeleteUserPositiveAssertMessage() {
+        try {
+            when(userService.deleteUser(any())).thenReturn("User deleted with Id: 1");
+            ResponseEntity<String> responseEntity=userServiceController.deleteUser(1L);
+            assertEquals("User deleted with Id: 1",responseEntity.getBody());
+        }catch(Exception e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testAddUserPositiveAssertUserName() {
+        UserDTO userDTO=new UserDTO();
+        userDTO.setId(1L);
+        userDTO.setUserName("Suraj");
+        userDTO.setEmail("suraj@example.com");
+
+        try {
+            when(userService.createUser(any(UserDTO.class))).thenReturn(userDTO);
+            ResponseEntity<UserDTO> responseEntity=userServiceController.createUser(userDTO);
+            assertEquals("Suraj",responseEntity.getBody().getUserName());
+        }catch(Exception e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testUpdateUserPositiveAssertUpdatedUserName() {
+        UserDTO userDTO=new UserDTO();
+        userDTO.setId(1L);
+        userDTO.setUserName("UpdatedYash");
+        userDTO.setEmail("yash@example.com");
+
+        try {
+            when(userService.updateUser(any(),any(UserDTO.class))).thenReturn(userDTO);
+            ResponseEntity<UserDTO> responseEntity=userServiceController.updateUser(1L,userDTO);
+            assertEquals("UpdatedYash",responseEntity.getBody().getUserName());
+        }catch(Exception e) {
+            assertTrue(false);
+        }
+    }
+
 }

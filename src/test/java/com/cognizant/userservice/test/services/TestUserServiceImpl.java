@@ -431,4 +431,160 @@ public class TestUserServiceImpl {
                     .hasMessageContaining("User Already Exists with Email Id: aman@example.com");
         }
     }
+
+    @Test
+    public void testGetUserPositiveAssertUserName(){
+        try{
+            User user=new User();
+            user.setId(1L);
+            user.setUserName("Aman");
+            user.setEmail("aman@example.com");
+
+            UserDTO userDTO=new UserDTO();
+            userDTO.setId(1L);
+            userDTO.setUserName("Aman");
+            userDTO.setEmail("aman@example.com");
+
+            when(userRepository.findById(any())).thenReturn(Optional.of(user));
+            when(modelMapper.map(any(User.class),eq(UserDTO.class))).thenReturn(userDTO);
+
+            UserDTO actualUserDTO=userServiceImpl.getUser(1L);
+            assertEquals("Aman",actualUserDTO.getUserName());
+        } catch(Exception ex){
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testGetUserPositiveAssertEmail(){
+        try{
+            User user=new User();
+            user.setId(1L);
+            user.setUserName("Aman");
+            user.setEmail("aman@example.com");
+
+            UserDTO userDTO=new UserDTO();
+            userDTO.setId(1L);
+            userDTO.setUserName("Aman");
+            userDTO.setEmail("aman@example.com");
+
+            when(userRepository.findById(any())).thenReturn(Optional.of(user));
+            when(modelMapper.map(any(User.class),eq(UserDTO.class))).thenReturn(userDTO);
+
+            UserDTO actualUserDTO=userServiceImpl.getUser(1L);
+            assertEquals("aman@example.com",actualUserDTO.getEmail());
+        } catch(Exception ex){
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testCreateUserPositiveAssertId(){
+        try{
+            UserDTO userDTO=new UserDTO();
+            userDTO.setUserName("Akash");
+            userDTO.setEmail("akash@example.com");
+
+            User user=new User();
+            User savedUser=new User();
+            savedUser.setId(1L);
+            savedUser.setUserName("Akash");
+            savedUser.setEmail("akash@example.com");
+
+            UserDTO savedUserDTO=new UserDTO();
+            savedUserDTO.setId(1L);
+            savedUserDTO.setUserName("Akash");
+            savedUserDTO.setEmail("akash@example.com");
+
+            when(userRepository.findByEmail(any())).thenReturn(Optional.empty());
+            when(modelMapper.map(any(UserDTO.class),eq(User.class))).thenReturn(user);
+            when(userRepository.save(any(User.class))).thenReturn(savedUser);
+            when(modelMapper.map(any(User.class),eq(UserDTO.class))).thenReturn(savedUserDTO);
+
+            UserDTO actualUserDTO=userServiceImpl.createUser(userDTO);
+            assertEquals(1L,actualUserDTO.getId());
+        } catch(Exception ex){
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testCreateUserPositiveAssertUserName(){
+        try{
+            UserDTO userDTO=new UserDTO();
+            userDTO.setUserName("Akash");
+            userDTO.setEmail("akash@example.com");
+
+            User user=new User();
+            User savedUser=new User();
+            savedUser.setId(1L);
+            savedUser.setUserName("Akash");
+
+            UserDTO savedUserDTO=new UserDTO();
+            savedUserDTO.setId(1L);
+            savedUserDTO.setUserName("Akash");
+            savedUserDTO.setEmail("akash@example.com");
+
+            when(userRepository.findByEmail(any())).thenReturn(Optional.empty());
+            when(modelMapper.map(any(UserDTO.class),eq(User.class))).thenReturn(user);
+            when(userRepository.save(any(User.class))).thenReturn(savedUser);
+            when(modelMapper.map(any(User.class),eq(UserDTO.class))).thenReturn(savedUserDTO);
+
+            UserDTO actualUserDTO=userServiceImpl.createUser(userDTO);
+            assertEquals("Akash",actualUserDTO.getUserName());
+        } catch(Exception ex){
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testDeleteUserPositiveAssertMessage(){
+        try{
+            User user=new User();
+            user.setId(1L);
+            user.setUserName("Aman");
+            user.setEmail("aman@example.com");
+
+            when(userRepository.findById(any())).thenReturn(Optional.of(user));
+
+            String result=userServiceImpl.deleteUser(1L);
+            assertEquals("User deleted with Id: 1",result);
+        } catch(Exception ex){
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testUpdateUserPositiveAssertUpdatedUserName(){
+        try{
+            UserDTO userDTO=new UserDTO();
+            userDTO.setUserName("UpdatedName");
+            userDTO.setEmail("updated@example.com");
+
+            User existingUser=new User();
+            existingUser.setId(1L);
+            existingUser.setUserName("OldName");
+            existingUser.setEmail("old@example.com");
+
+            User savedUser=new User();
+            savedUser.setId(1L);
+            savedUser.setUserName("UpdatedName");
+            savedUser.setEmail("updated@example.com");
+
+            UserDTO savedUserDTO=new UserDTO();
+            savedUserDTO.setId(1L);
+            savedUserDTO.setUserName("UpdatedName");
+            savedUserDTO.setEmail("updated@example.com");
+
+            when(userRepository.findById(any())).thenReturn(Optional.of(existingUser));
+            when(userRepository.findByEmail(any())).thenReturn(Optional.empty());
+            when(userRepository.save(any(User.class))).thenReturn(savedUser);
+            when(modelMapper.map(any(User.class),eq(UserDTO.class))).thenReturn(savedUserDTO);
+
+            UserDTO actualUserDTO=userServiceImpl.updateUser(1L,userDTO);
+            assertEquals("UpdatedName",actualUserDTO.getUserName());
+        } catch(Exception ex){
+            assertTrue(false);
+        }
+    }
 }
