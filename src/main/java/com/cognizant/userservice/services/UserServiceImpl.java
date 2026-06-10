@@ -22,8 +22,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ModelMapper modelMapper;
 
-//    private static final Logger log = LoggerFactory.getLogger(UserService.class);
-
     @Override
     public UserDTO createUser(UserDTO userDTO) {
         if(userRepository.findByEmail(userDTO.getEmail()).isPresent()){

@@ -29,8 +29,6 @@ public class UserServiceController {
     @Autowired
     private UserService userService;
 
-//    private static final Logger log = LoggerFactory.getLogger(UserServiceController.class);
-
     @PostMapping
     @Operation(
             summary="Create User REST API",
