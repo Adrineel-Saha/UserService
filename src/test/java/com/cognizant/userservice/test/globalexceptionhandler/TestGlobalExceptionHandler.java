@@ -1,4 +1,4 @@
-package com.cognizant.userservice.test.globalexceptionhandler;
+﻿package com.cognizant.userservice.test.globalexceptionhandler;
 
 import com.cognizant.userservice.exceptions.EmailAlreadyExistsException;
 import com.cognizant.userservice.exceptions.ResourceNotFoundException;
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TestGlobalExceptionHandler {
+class TestGlobalExceptionHandler {
 
     @Mock
     private ResourceNotFoundException resourceNotFoundException;

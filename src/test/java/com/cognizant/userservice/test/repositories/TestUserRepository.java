@@ -1,4 +1,4 @@
-package com.cognizant.userservice.test.repositories;
+﻿package com.cognizant.userservice.test.repositories;
 
 import com.cognizant.userservice.entities.User;
 import com.cognizant.userservice.main.UserServiceApplication;
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DataJpaTest
 @ContextConfiguration(classes = UserServiceApplication.class)
 @ActiveProfiles("test")
-public class TestUserRepository {
+class TestUserRepository {
     @Autowired
     private UserRepository userRepository;
     @Autowired

@@ -1,4 +1,4 @@
-package com.cognizant.userservice.test.services;
+﻿package com.cognizant.userservice.test.services;
 
 import com.cognizant.userservice.dtos.UserDTO;
 import com.cognizant.userservice.entities.User;
@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.eq;
 
-public class TestUserServiceImpl {
+class TestUserServiceImpl {
     @Mock
     private UserRepository userRepository;
     @Mock
