@@ -1,4 +1,4 @@
-package com.cognizant.userservice.test.repositories;
+﻿package com.cognizant.userservice.test.repositories;
 
 import com.cognizant.userservice.entities.User;
 import com.cognizant.userservice.main.UserServiceApplication;
@@ -27,7 +27,7 @@ public class TestUserRepository {
     private TestEntityManager entityManager;
 
     @Test
-    public void testFindAllPositive(){
+    void testFindAllPositive(){
         User user=new User();
         user.setUserName("Adrineel");
         user.setEmail("Adrineel@example.com");
@@ -39,13 +39,13 @@ public class TestUserRepository {
     }
 
     @Test
-    public void testFindAllNegative(){
+    void testFindAllNegative(){
         List<User> userList = userRepository.findAll();
         assertTrue(!userList.iterator().hasNext());
     }
 
     @Test
-    public void testFindByIdPositive(){
+    void testFindByIdPositive(){
         User user=new User();
         user.setUserName("Akash");
         user.setEmail("Akash@example.com");
@@ -58,13 +58,13 @@ public class TestUserRepository {
     }
 
     @Test
-    public void testFindByIdNegative(){
+    void testFindByIdNegative(){
         Optional<User> userOptional=userRepository.findById(2L);
         assertTrue(!userOptional.isPresent());
     }
 
     @Test
-    public void testSavePositive(){
+    void testSavePositive(){
         User user=new User();
         user.setUserName("Yash");
         user.setEmail("Yash@example.com");
@@ -77,13 +77,13 @@ public class TestUserRepository {
     }
 
     @Test
-    public void testSaveNegative(){
+    void testSaveNegative(){
         Optional<User> userOptional=userRepository.findById(3L);
         assertTrue(!userOptional.isPresent());
     }
 
     @Test
-    public void deletePositive(){
+    void deletePositive(){
         User user=new User();
         user.setUserName("Arunabh");
         user.setEmail("Arunabh@example.com");
@@ -97,13 +97,13 @@ public class TestUserRepository {
     }
 
     @Test
-    public void deleteNegative(){
+    void deleteNegative(){
         Optional<User> userOptional=userRepository.findById(4L);
         assertTrue(!userOptional.isPresent());
     }
 
     @Test
-    public void findByEmailPositive(){
+    void findByEmailPositive(){
         User user=new User();
         user.setUserName("Suraj");
         user.setEmail("Suraj@example.com");
@@ -116,7 +116,7 @@ public class TestUserRepository {
     }
 
     @Test
-    public void findByEmailNegative(){
+    void findByEmailNegative(){
         Optional<User> userOptional=userRepository.findByEmail("Suraj@example.com");
         assertTrue(!userOptional.isPresent());
     }

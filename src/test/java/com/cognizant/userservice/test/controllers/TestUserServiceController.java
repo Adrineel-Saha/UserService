@@ -1,4 +1,4 @@
-package com.cognizant.userservice.test.controllers;
+﻿package com.cognizant.userservice.test.controllers;
 
 import com.cognizant.userservice.controllers.UserServiceController;
 import com.cognizant.userservice.dtos.UserDTO;
@@ -45,7 +45,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testGetAllUsersPositiveAssertReturnValue() {
+    void testGetAllUsersPositiveAssertReturnValue() {
         List<UserDTO> userDTOList=new ArrayList<>();
 
         UserDTO userDTO=new UserDTO();
@@ -66,7 +66,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testGetAllUsersPositiveAssertStatusCode() {
+    void testGetAllUsersPositiveAssertStatusCode() {
         List<UserDTO> userDTOList=new ArrayList<>();
 
         UserDTO userDTO=new UserDTO();
@@ -86,7 +86,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testGetAllUsersNegativeAssertReturnValue() {
+    void testGetAllUsersNegativeAssertReturnValue() {
         List<UserDTO> userDTOList=new ArrayList<>();
         try {
             when(userService.getAllUsers()).thenReturn(userDTOList);
@@ -98,7 +98,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testGetAllLUsersNegativeAssertStatusCode() {
+    void testGetAllLUsersNegativeAssertStatusCode() {
         List<UserDTO> userDTOList=new ArrayList<>();
         try {
             when(userService.getAllUsers()).thenReturn(userDTOList);
@@ -110,7 +110,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testDeleteUserPositiveAssertReturnValue() {
+    void testDeleteUserPositiveAssertReturnValue() {
         UserDTO userDTO=new UserDTO();
         userDTO.setId(1L);
         userDTO.setUserName("Aman");
@@ -127,7 +127,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testGetDeletePositiveAssertStatusCode() {
+    void testGetDeletePositiveAssertStatusCode() {
         UserDTO userDTO=new UserDTO();
         userDTO.setId(1L);
         userDTO.setUserName("Aman");
@@ -143,7 +143,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testDeleteUserNegativeAssertReturnValue() {
+    void testDeleteUserNegativeAssertReturnValue() {
         String result=null;
         try {
             when(userService.deleteUser(any())).thenReturn(result);
@@ -155,7 +155,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testGetLUserNegativeAssertStatusCode() {
+    void testGetLUserNegativeAssertStatusCode() {
         UserDTO userDTO=null;
         try {
             when(userService.getUser(any())).thenReturn(userDTO);
@@ -167,7 +167,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testGetUserPositiveAssertReturnValue() {
+    void testGetUserPositiveAssertReturnValue() {
         UserDTO userDTO=new UserDTO();
         userDTO.setId(1L);
         userDTO.setUserName("Suraj");
@@ -184,7 +184,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testGetUserPositiveAssertStatusCode() {
+    void testGetUserPositiveAssertStatusCode() {
         UserDTO userDTO=new UserDTO();
         userDTO.setId(1L);
         userDTO.setUserName("Suraj");
@@ -200,7 +200,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testGetUserNegativeAssertReturnValue() {
+    void testGetUserNegativeAssertReturnValue() {
         UserDTO userDTO=null;
         try {
             when(userService.getUser(any())).thenReturn(userDTO);
@@ -212,7 +212,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testDeleteLUserNegativeAssertStatusCode() {
+    void testDeleteLUserNegativeAssertStatusCode() {
         UserDTO userDTO=null;
         try {
             when(userService.getUser(any())).thenReturn(userDTO);
@@ -224,7 +224,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testAddUserWhenUserIsValid() {
+    void testAddUserWhenUserIsValid() {
         UserDTO userDTO=new UserDTO();
         userDTO.setId(1L);
         userDTO.setUserName("Suraj");
@@ -234,7 +234,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testAddUserPositiveAssertReturnValue() {
+    void testAddUserPositiveAssertReturnValue() {
         UserDTO userDTO=new UserDTO();
         userDTO.setId(1L);
         userDTO.setUserName("Suraj");
@@ -251,7 +251,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testAddUserPositiveAssertStatusCode() {
+    void testAddUserPositiveAssertStatusCode() {
         UserDTO userDTO=new UserDTO();
         userDTO.setId(1L);
         userDTO.setUserName("Suraj");
@@ -267,7 +267,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testAddUserWhenUserIsNotValid() {
+    void testAddUserWhenUserIsNotValid() {
         UserDTO userDTO=new UserDTO();
         userDTO.setId(1L);
         userDTO.setUserName("S");
@@ -277,7 +277,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testAddUserNegativeAssertReturnValue() {
+    void testAddUserNegativeAssertReturnValue() {
         UserDTO userDTO=null;
 
         try {
@@ -291,7 +291,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testAddUserNegativeAssertStatusCode() {
+    void testAddUserNegativeAssertStatusCode() {
         UserDTO userDTO=null;
 
         try {
@@ -304,7 +304,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testUpdateUserWhenUserIsValid() {
+    void testUpdateUserWhenUserIsValid() {
         UserDTO userDTO=new UserDTO();
         userDTO.setId(1L);
         userDTO.setUserName("Yash");
@@ -314,7 +314,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testUpdateUserPositiveAssertReturnValue() {
+    void testUpdateUserPositiveAssertReturnValue() {
         UserDTO userDTO=new UserDTO();
         userDTO.setId(1L);
         userDTO.setUserName("Yash");
@@ -331,7 +331,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testUpdateUserPositiveAssertStatusCode() {
+    void testUpdateUserPositiveAssertStatusCode() {
         UserDTO userDTO=new UserDTO();
         userDTO.setId(1L);
         userDTO.setUserName("Yash");
@@ -347,7 +347,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testUpdateUserWhenUserIsNotValid() {
+    void testUpdateUserWhenUserIsNotValid() {
         UserDTO userDTO=new UserDTO();
         userDTO.setId(1L);
         userDTO.setUserName("Y");
@@ -357,7 +357,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testUpdateUserNegativeAssertReturnValue() {
+    void testUpdateUserNegativeAssertReturnValue() {
         UserDTO userDTO=null;
 
         try {
@@ -371,7 +371,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testUpdateUserNegativeAssertStatusCode() {
+    void testUpdateUserNegativeAssertStatusCode() {
         UserDTO userDTO=null;
 
         try {
@@ -384,7 +384,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testGetAllUsersPositiveAssertListSize() {
+    void testGetAllUsersPositiveAssertListSize() {
         List<UserDTO> userDTOList=new ArrayList<>();
 
         UserDTO userDTO1=new UserDTO();
@@ -410,7 +410,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testGetUserPositiveAssertUserName() {
+    void testGetUserPositiveAssertUserName() {
         UserDTO userDTO=new UserDTO();
         userDTO.setId(1L);
         userDTO.setUserName("Suraj");
@@ -426,7 +426,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testGetUserPositiveAssertEmail() {
+    void testGetUserPositiveAssertEmail() {
         UserDTO userDTO=new UserDTO();
         userDTO.setId(1L);
         userDTO.setUserName("Suraj");
@@ -442,7 +442,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testDeleteUserPositiveAssertMessage() {
+    void testDeleteUserPositiveAssertMessage() {
         try {
             when(userService.deleteUser(any())).thenReturn("User deleted with Id: 1");
             ResponseEntity<String> responseEntity=userServiceController.deleteUser(1L);
@@ -453,7 +453,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testAddUserPositiveAssertUserName() {
+    void testAddUserPositiveAssertUserName() {
         UserDTO userDTO=new UserDTO();
         userDTO.setId(1L);
         userDTO.setUserName("Suraj");
@@ -469,7 +469,7 @@ public class TestUserServiceController {
     }
 
     @Test
-    public void testUpdateUserPositiveAssertUpdatedUserName() {
+    void testUpdateUserPositiveAssertUpdatedUserName() {
         UserDTO userDTO=new UserDTO();
         userDTO.setId(1L);
         userDTO.setUserName("UpdatedYash");

@@ -1,4 +1,4 @@
-package com.cognizant.userservice.test.services;
+﻿package com.cognizant.userservice.test.services;
 
 import com.cognizant.userservice.dtos.UserDTO;
 import com.cognizant.userservice.entities.User;
@@ -51,7 +51,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testGetAllUsersPositiveOneUserFound(){
+    void testGetAllUsersPositiveOneUserFound(){
         try{
             List<User> listUserMock = mock(List.class);
             when(userRepository.findAll()).thenReturn(listUserMock);
@@ -70,7 +70,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testGetAllUsersPositiveMultipleUsersFound(){
+    void testGetAllUsersPositiveMultipleUsersFound(){
         try{
             List<User> listUserMock = mock(List.class);
             when(userRepository.findAll()).thenReturn(listUserMock);
@@ -91,7 +91,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testGetAllUsersNegativeWhenListIsEmpty(){
+    void testGetAllUsersNegativeWhenListIsEmpty(){
         try{
             when(userRepository.findAll()).thenReturn(List.of());
 
@@ -105,7 +105,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testCreateUserPositive(){
+    void testCreateUserPositive(){
         try{
             UserDTO userDTO=new UserDTO();
             userDTO.setUserName("Akash");
@@ -139,7 +139,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testCreateUserNegativeWhenUserNameIsBlank(){
+    void testCreateUserNegativeWhenUserNameIsBlank(){
         UserDTO userDTO=new UserDTO();
         userDTO.setUserName("");
         userDTO.setEmail("yash@example.com");
@@ -153,7 +153,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testCreateUserNegativeWhenUserNameLengthIsLess(){
+    void testCreateUserNegativeWhenUserNameLengthIsLess(){
         UserDTO userDTO=new UserDTO();
         userDTO.setUserName("ya");
         userDTO.setEmail("yash@example.com");
@@ -166,7 +166,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testCreateUserNegativeWhenUserNameLengthIsMore(){
+    void testCreateUserNegativeWhenUserNameLengthIsMore(){
         UserDTO userDTO=new UserDTO();
         userDTO.setUserName("yashbiswarkarmaarunabhkalitaadrineelsahasurajsharmaakashpatil");
         userDTO.setEmail("yash@example.com");
@@ -179,7 +179,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testCreateUserNegativeWhenEmailIsBlank(){
+    void testCreateUserNegativeWhenEmailIsBlank(){
         UserDTO userDTO=new UserDTO();
         userDTO.setUserName("Yash");
         userDTO.setEmail("");
@@ -193,7 +193,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testCreateUserNegativeWhenEmailIsInValid(){
+    void testCreateUserNegativeWhenEmailIsInValid(){
         UserDTO userDTO=new UserDTO();
         userDTO.setUserName("Yash");
         userDTO.setEmail("yashexamplecom");
@@ -207,7 +207,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testCreateUserNegativeWhenEmailAlreadyExists(){
+    void testCreateUserNegativeWhenEmailAlreadyExists(){
         try{
             UserDTO userDTO=new UserDTO();
             userDTO.setUserName("Suraj");
@@ -229,7 +229,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testGetUserPositive(){
+    void testGetUserPositive(){
         try{
             User user=new User();
             user.setId(1L);
@@ -252,7 +252,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testGetUserNegativeWhenUserNotFound(){
+    void testGetUserNegativeWhenUserNotFound(){
         try{
             when(userRepository.findById(any())).thenReturn(Optional.empty());
             UserDTO actualUserDTO=userServiceImpl.getUser(1L);
@@ -264,7 +264,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testDeleteUserPositive(){
+    void testDeleteUserPositive(){
         try{
             User user=new User();
             user.setId(1L);
@@ -281,7 +281,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testDeleteUserNegativeWhenUserNotFound(){
+    void testDeleteUserNegativeWhenUserNotFound(){
         try{
             when(userRepository.findById(any())).thenReturn(Optional.empty());
             String result=userServiceImpl.deleteUser(1L);
@@ -293,7 +293,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testUpdateUserPositive(){
+    void testUpdateUserPositive(){
         try{
             UserDTO userDTO=new UserDTO();
             userDTO.setUserName("Akash");
@@ -327,7 +327,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testUpdateUserNegativeWhenUserNameIsBlank(){
+    void testUpdateUserNegativeWhenUserNameIsBlank(){
         UserDTO userDTO=new UserDTO();
         userDTO.setUserName("");
         userDTO.setEmail("aman@example.com");
@@ -341,7 +341,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testUpdateUserNegativeWhenUserNameLengthIsLess(){
+    void testUpdateUserNegativeWhenUserNameLengthIsLess(){
         UserDTO userDTO=new UserDTO();
         userDTO.setUserName("am");
         userDTO.setEmail("aman@example.com");
@@ -354,7 +354,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testUpdateUserNegativeWhenUserNameLengthIsMore(){
+    void testUpdateUserNegativeWhenUserNameLengthIsMore(){
         UserDTO userDTO=new UserDTO();
         userDTO.setUserName("amanrajarunabhkalitaadrineelsahasurajsharmaakashpatil");
         userDTO.setEmail("aman@example.com");
@@ -367,7 +367,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testUpdateUserNegativeWhenEmailIsBlank(){
+    void testUpdateUserNegativeWhenEmailIsBlank(){
         UserDTO userDTO=new UserDTO();
         userDTO.setUserName("Aman");
         userDTO.setEmail("");
@@ -381,7 +381,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testUpdateUserNegativeWhenEmailIsInValid(){
+    void testUpdateUserNegativeWhenEmailIsInValid(){
         UserDTO userDTO=new UserDTO();
         userDTO.setUserName("Aman");
         userDTO.setEmail("amanexamplecom");
@@ -394,7 +394,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testUpdateUserNegativeWhenUserNotFound(){
+    void testUpdateUserNegativeWhenUserNotFound(){
         try{
             UserDTO userDTO=new UserDTO();
             userDTO.setUserName("Aman");
@@ -410,7 +410,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testUpdateUserNegativeWhenEmailAlreadyExists(){
+    void testUpdateUserNegativeWhenEmailAlreadyExists(){
         try{
             UserDTO userDTO=new UserDTO();
             userDTO.setUserName("Aman");
@@ -433,7 +433,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testGetUserPositiveAssertUserName(){
+    void testGetUserPositiveAssertUserName(){
         try{
             User user=new User();
             user.setId(1L);
@@ -456,7 +456,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testGetUserPositiveAssertEmail(){
+    void testGetUserPositiveAssertEmail(){
         try{
             User user=new User();
             user.setId(1L);
@@ -479,7 +479,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testCreateUserPositiveAssertId(){
+    void testCreateUserPositiveAssertId(){
         try{
             UserDTO userDTO=new UserDTO();
             userDTO.setUserName("Akash");
@@ -509,7 +509,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testCreateUserPositiveAssertUserName(){
+    void testCreateUserPositiveAssertUserName(){
         try{
             UserDTO userDTO=new UserDTO();
             userDTO.setUserName("Akash");
@@ -538,7 +538,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testDeleteUserPositiveAssertMessage(){
+    void testDeleteUserPositiveAssertMessage(){
         try{
             User user=new User();
             user.setId(1L);
@@ -555,7 +555,7 @@ public class TestUserServiceImpl {
     }
 
     @Test
-    public void testUpdateUserPositiveAssertUpdatedUserName(){
+    void testUpdateUserPositiveAssertUpdatedUserName(){
         try{
             UserDTO userDTO=new UserDTO();
             userDTO.setUserName("UpdatedName");
