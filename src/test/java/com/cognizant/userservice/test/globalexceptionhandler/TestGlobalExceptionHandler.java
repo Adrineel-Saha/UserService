@@ -1,4 +1,4 @@
-﻿package com.cognizant.userservice.test.globalexceptionhandler;
+package com.cognizant.userservice.test.globalexceptionhandler;
 
 import com.cognizant.userservice.exceptions.EmailAlreadyExistsException;
 import com.cognizant.userservice.exceptions.ResourceNotFoundException;

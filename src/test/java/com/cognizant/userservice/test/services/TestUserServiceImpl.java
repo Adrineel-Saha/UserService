@@ -1,4 +1,4 @@
-﻿package com.cognizant.userservice.test.services;
+package com.cognizant.userservice.test.services;
 
 import com.cognizant.userservice.dtos.UserDTO;
 import com.cognizant.userservice.entities.User;

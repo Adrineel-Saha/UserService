@@ -1,4 +1,4 @@
-﻿package com.cognizant.userservice.test.controllers;
+package com.cognizant.userservice.test.controllers;
 
 import com.cognizant.userservice.controllers.UserServiceController;
 import com.cognizant.userservice.dtos.UserDTO;
