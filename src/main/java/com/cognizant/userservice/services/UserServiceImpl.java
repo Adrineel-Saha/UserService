@@ -8,8 +8,8 @@ import com.cognizant.userservice.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.core.KafkaTemplate;
+//import org.springframework.beans.factory.annotation.Value;
+//import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,10 +21,10 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Autowired
     private ModelMapper modelMapper;
-    @Autowired
-    private KafkaTemplate<String, UserDTO> kafkaTemplate;
-    @Value("${app.kafka.userproducer.topic}")
-    private String topic;
+//    @Autowired
+//    private KafkaTemplate<String, UserDTO> kafkaTemplate;
+//    @Value("${app.kafka.userproducer.topic}")
+//    private String topic;
 
     @Override
     public UserDTO createUser(UserDTO userDTO) {
@@ -36,8 +36,8 @@ public class UserServiceImpl implements UserService {
         User savedUser=userRepository.save(user);
         UserDTO savedUserDTO = modelMapper.map(savedUser,UserDTO.class);
 
-        kafkaTemplate.send(topic, savedUserDTO);
-        log.info("Published UserDTO to {}: {}", topic, savedUserDTO);
+//        kafkaTemplate.send(topic, savedUserDTO);
+//        log.info("Published UserDTO to {}: {}", topic, savedUserDTO);
 
         return savedUserDTO;
     }
@@ -63,8 +63,8 @@ public class UserServiceImpl implements UserService {
 
         UserDTO userDTO=modelMapper.map(user,UserDTO.class);
 
-        kafkaTemplate.send(topic, userDTO);
-        log.info("Published UserDTO to {}: {}", topic, userDTO);
+//        kafkaTemplate.send(topic, userDTO);
+//        log.info("Published UserDTO to {}: {}", topic, userDTO);
 
         return userDTO;
     }
@@ -85,8 +85,8 @@ public class UserServiceImpl implements UserService {
         User updateUser=userRepository.save(user);
         UserDTO updatedUserDTO=modelMapper.map(updateUser, UserDTO.class);
 
-        kafkaTemplate.send(topic, updatedUserDTO);
-        log.info("Published UserDTO to {}: {}", topic, updatedUserDTO);
+//        kafkaTemplate.send(topic, updatedUserDTO);
+//        log.info("Published UserDTO to {}: {}", topic, updatedUserDTO);
 
         return updatedUserDTO;
     }
