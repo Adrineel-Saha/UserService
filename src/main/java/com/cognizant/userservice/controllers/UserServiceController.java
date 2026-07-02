@@ -44,9 +44,9 @@ public class UserServiceController {
             )
     })
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO){
-        log.info("Adding new User: " + userDTO);
+        log.info("Adding new User: {}", userDTO);
         UserDTO responseUserDTO =userService.createUser(userDTO);
-        log.info("Created User: " + responseUserDTO);
+        log.info("Created User: {}", responseUserDTO);
 
         if(responseUserDTO!=null){
             return new ResponseEntity<>(responseUserDTO, HttpStatus.CREATED);
@@ -74,7 +74,7 @@ public class UserServiceController {
     public ResponseEntity<List<UserDTO>> getAllUsers(){
         log.info("Getting All Users");
         List<UserDTO> responseUserDTOList =userService.getAllUsers();
-        log.info("Users list: " + responseUserDTOList);
+        log.info("Users list: {}", responseUserDTOList);
         if(responseUserDTOList!=null && !responseUserDTOList.isEmpty()){
             return new ResponseEntity<>(responseUserDTOList, HttpStatus.OK);
         }
@@ -99,9 +99,9 @@ public class UserServiceController {
             )
     })
     public ResponseEntity<UserDTO> getUser(@PathVariable("id") Long id){
-        log.info("Getting User with Id: " + id);
+        log.info("Getting User with Id: {}", id);
         UserDTO responseUserDTO =userService.getUser(id);
-        log.info("Found User: " + responseUserDTO);
+        log.info("Found User: {}", responseUserDTO);
         if (responseUserDTO != null) {
             return new ResponseEntity<>(responseUserDTO, HttpStatus.OK);
         }
@@ -130,9 +130,9 @@ public class UserServiceController {
             )
     })
     public ResponseEntity<UserDTO> updateUser(@PathVariable("id") Long id,@Valid @RequestBody UserDTO userDTO){
-        log.info("Updating User with Id: " + id + " and details: " + userDTO);
+        log.info("Updating User with Id: {} and details: {}", id, userDTO);
         UserDTO responseUserDTO =userService.updateUser(id,userDTO);
-        log.info("Updated User: " + responseUserDTO);
+        log.info("Updated User: {}", responseUserDTO);
         if(responseUserDTO != null){
             return new ResponseEntity<>(responseUserDTO, HttpStatus.ACCEPTED);
         }
@@ -158,7 +158,7 @@ public class UserServiceController {
             ),
     })
     public ResponseEntity<String>  deleteUser(@PathVariable("id") Long id){
-        log.info("Deleting User with Id: " + id);
+        log.info("Deleting User with Id: {}", id);
         String result=userService.deleteUser(id);
         if (result != null) {
             return new ResponseEntity<>(result, HttpStatus.OK);
