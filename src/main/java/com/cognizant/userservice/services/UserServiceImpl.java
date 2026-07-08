@@ -11,11 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.beans.factory.annotation.Value;
 //import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @Slf4j
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
@@ -27,6 +29,7 @@ public class UserServiceImpl implements UserService {
 //    private String topic;
 
     @Override
+    @Transactional
     public UserDTO createUser(UserDTO userDTO) {
         if(userRepository.findByEmail(userDTO.getEmail()).isPresent()){
             throw new EmailAlreadyExistsException("User Already Exists with Email Id: " + userDTO.getEmail());
@@ -70,6 +73,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDTO updateUser(Long id, UserDTO userDTO) {
         User user=userRepository.findById(id).orElseThrow(
                 ()->new ResourceNotFoundException("User not found with Id: " + id)
@@ -92,6 +96,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public String deleteUser(Long id) {
         User user=userRepository.findById(id).orElseThrow(
                 ()->new ResourceNotFoundException("User not found with Id: " + id)
