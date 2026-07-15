@@ -6,6 +6,8 @@ import com.cognizant.userservice.exceptions.EmailAlreadyExistsException;
 import com.cognizant.userservice.exceptions.ResourceNotFoundException;
 import com.cognizant.userservice.repositories.UserRepository;
 import com.cognizant.userservice.services.UserServiceImpl;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -20,6 +22,7 @@ import org.modelmapper.ModelMapper;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.eq;
 
 class TestUserServiceImpl {
@@ -35,6 +39,8 @@ class TestUserServiceImpl {
     private UserRepository userRepository;
     @Mock
     private ModelMapper modelMapper;
+    @Mock
+    private KafkaTemplate<String, UserDTO> kafkaTemplate;
     @InjectMocks
     private UserServiceImpl userServiceImpl;
 
@@ -130,6 +136,8 @@ class TestUserServiceImpl {
             when(modelMapper.map(any(UserDTO.class),eq(User.class))).thenReturn(user);
             when(userRepository.save(any(User.class))).thenReturn(savedUser);
             when(modelMapper.map(any(User.class),eq(UserDTO.class))).thenReturn(saveduserDTO);
+            when(kafkaTemplate.send(anyString(),any(UserDTO.class)))
+                    .thenReturn(CompletableFuture.completedFuture(mock(SendResult.class)));
 
             UserDTO actualUserDTO=userServiceImpl.createUser(userDTO);
             assertNotNull(actualUserDTO);
@@ -243,6 +251,8 @@ class TestUserServiceImpl {
 
             when(userRepository.findById(any())).thenReturn(Optional.of(user));
             when(modelMapper.map(any(User.class),eq(UserDTO.class))).thenReturn(userDTO);
+            when(kafkaTemplate.send(anyString(),any(UserDTO.class)))
+                    .thenReturn(CompletableFuture.completedFuture(mock(SendResult.class)));
 
             UserDTO actualUserDTO=userServiceImpl.getUser(1L);
             assertNotNull(actualUserDTO);
@@ -318,6 +328,8 @@ class TestUserServiceImpl {
             when(userRepository.findByEmail(userDTO.getEmail())).thenReturn(Optional.empty());
             when(userRepository.save(any(User.class))).thenReturn(savedUser);
             when(modelMapper.map(any(User.class),eq(UserDTO.class))).thenReturn(saveduserDTO);
+            when(kafkaTemplate.send(anyString(),any(UserDTO.class)))
+                    .thenReturn(CompletableFuture.completedFuture(mock(SendResult.class)));
 
             UserDTO actualUserDTO=userServiceImpl.updateUser(1L,userDTO);
             assertNotNull(actualUserDTO);
@@ -447,6 +459,8 @@ class TestUserServiceImpl {
 
             when(userRepository.findById(any())).thenReturn(Optional.of(user));
             when(modelMapper.map(any(User.class),eq(UserDTO.class))).thenReturn(userDTO);
+            when(kafkaTemplate.send(anyString(),any(UserDTO.class)))
+                    .thenReturn(CompletableFuture.completedFuture(mock(SendResult.class)));
 
             UserDTO actualUserDTO=userServiceImpl.getUser(1L);
             assertEquals("Aman",actualUserDTO.getUserName());
@@ -470,6 +484,8 @@ class TestUserServiceImpl {
 
             when(userRepository.findById(any())).thenReturn(Optional.of(user));
             when(modelMapper.map(any(User.class),eq(UserDTO.class))).thenReturn(userDTO);
+            when(kafkaTemplate.send(anyString(),any(UserDTO.class)))
+                    .thenReturn(CompletableFuture.completedFuture(mock(SendResult.class)));
 
             UserDTO actualUserDTO=userServiceImpl.getUser(1L);
             assertEquals("aman@example.com",actualUserDTO.getEmail());
@@ -500,6 +516,8 @@ class TestUserServiceImpl {
             when(modelMapper.map(any(UserDTO.class),eq(User.class))).thenReturn(user);
             when(userRepository.save(any(User.class))).thenReturn(savedUser);
             when(modelMapper.map(any(User.class),eq(UserDTO.class))).thenReturn(savedUserDTO);
+            when(kafkaTemplate.send(anyString(),any(UserDTO.class)))
+                    .thenReturn(CompletableFuture.completedFuture(mock(SendResult.class)));
 
             UserDTO actualUserDTO=userServiceImpl.createUser(userDTO);
             assertEquals(1L,actualUserDTO.getId());
@@ -529,6 +547,8 @@ class TestUserServiceImpl {
             when(modelMapper.map(any(UserDTO.class),eq(User.class))).thenReturn(user);
             when(userRepository.save(any(User.class))).thenReturn(savedUser);
             when(modelMapper.map(any(User.class),eq(UserDTO.class))).thenReturn(savedUserDTO);
+            when(kafkaTemplate.send(anyString(),any(UserDTO.class)))
+                    .thenReturn(CompletableFuture.completedFuture(mock(SendResult.class)));
 
             UserDTO actualUserDTO=userServiceImpl.createUser(userDTO);
             assertEquals("Akash",actualUserDTO.getUserName());
@@ -580,6 +600,8 @@ class TestUserServiceImpl {
             when(userRepository.findByEmail(any())).thenReturn(Optional.empty());
             when(userRepository.save(any(User.class))).thenReturn(savedUser);
             when(modelMapper.map(any(User.class),eq(UserDTO.class))).thenReturn(savedUserDTO);
+            when(kafkaTemplate.send(anyString(),any(UserDTO.class)))
+                    .thenReturn(CompletableFuture.completedFuture(mock(SendResult.class)));
 
             UserDTO actualUserDTO=userServiceImpl.updateUser(1L,userDTO);
             assertEquals("UpdatedName",actualUserDTO.getUserName());
